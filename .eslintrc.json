@@ -60,6 +60,20 @@
         "filenames/no-index": 2,
         "import/no-useless-path-segments": 2,
         "import/no-default-export": 2,
+        "import/order": [
+            2,
+            {
+                "newlines-between": "always-and-inside-groups",
+                "groups": [
+                    "builtin",
+                    "internal",
+                    "external",
+                    "parent",
+                    "sibling",
+                    "index"
+                ]
+            }
+        ],
         "no-loops/no-loops": 2,
         "optimize-regex/optimize-regex": 1,
         "lodash/prefer-lodash-method": 0,

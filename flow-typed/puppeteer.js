@@ -8,6 +8,8 @@ declare module 'puppeteer' {
     declare class Page {
         goto(url: string): Promise<mixed>,
         screenshot(options: PageScreenshotOptionsType): Promise<mixed>,
+        click(cssSelector: string): Promise<mixed>,
+        type(cssSelector: string, text: string): Promise<mixed>,
     }
 
     declare class Browser {
