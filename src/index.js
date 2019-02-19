@@ -1,8 +1,11 @@
-const puppeteer = require('puppeteer');
+// @flow
 
-(async () => {
-    const browser = await puppeteer.launch({headless: false /*, executablePath: '/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome' */});
+import puppeteer from 'puppeteer';
+
+(async (): Promise<number> => {
+    const browser = await puppeteer.launch({headless: false});
     const page = await browser.newPage();
+
     await page.goto('https://example.com');
     await page.screenshot({path: 'example.png'});
 
