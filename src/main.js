@@ -2,8 +2,8 @@
 
 import puppeteer from 'puppeteer';
 
-(async (): Promise<void> => {
-    const browser = await puppeteer.launch({headless: false});
+(async () => {
+    const browser = await puppeteer.launch({headless: false, slowMo: 1e3});
     const page = await browser.newPage();
 
     await page.goto('https://example.com');
