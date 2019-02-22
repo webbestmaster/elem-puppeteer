@@ -4,16 +4,17 @@ import puppeteer from 'puppeteer';
 
 import {appConst} from './const';
 import {login} from './script/login';
+import {runSystem} from './script/run-system';
+import type {UserDataType} from './flow-types/user';
 
-(async () => {
-    const browser = await puppeteer.launch({headless: false, slowMo: 250});
-    const page = await browser.newPage();
+import {userList} from './user-list.js';
 
-    await page.goto(appConst.site.url);
+userList.forEach(async (userData: UserDataType) => {
+    const {page, browser} = await runSystem();
 
-    await login(page);
+    await login(page, userData);
 
     await page.screenshot({path: './screenshot/site.png'});
 
     await browser.close();
-})();
+});

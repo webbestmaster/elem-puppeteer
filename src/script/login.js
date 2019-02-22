@@ -2,6 +2,8 @@
 
 import type {Page} from 'puppeteer';
 
+import type {UserDataType} from '../flow-types/user';
+
 const loginSelector = {
     loginLink: 'a[title="Вход для игроков"]',
     loginNameInput: 'input[name="plogin"]',
@@ -9,12 +11,20 @@ const loginSelector = {
     loginFormSubmitButton: 'input[type="submit"]',
 };
 
-export async function login(page: Page) {
-    await page.click(loginSelector.loginLink);
+export async function login(page: Page, userData: UserDataType) {
+    const {login: userLogin, password} = userData;
 
-    await page.type(loginSelector.loginNameInput, '');
+    if (typeof userLogin === 'string' && typeof password === 'string') {
+        await page.click(loginSelector.loginLink);
 
-    await page.type(loginSelector.loginPassInput, '');
+        await page.type(loginSelector.loginNameInput, userLogin);
 
-    await page.click(loginSelector.loginFormSubmitButton);
+        await page.type(loginSelector.loginPassInput, password);
+
+        await page.click(loginSelector.loginFormSubmitButton);
+
+        return;
+    }
+
+    throw new Error('Login and Pass needed');
 }
