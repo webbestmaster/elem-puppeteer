@@ -1,7 +1,10 @@
 // @flow
 
+const siteUrl = 'http://elem.mobi';
+
 export const appConst = {
     site: {
-        url: 'http://elem.mobi/',
+        url: siteUrl,
+        duel: `${siteUrl}/duel`,
     },
 };

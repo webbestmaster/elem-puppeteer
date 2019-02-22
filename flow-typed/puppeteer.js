@@ -1,6 +1,8 @@
 // @flow
 
 declare module 'puppeteer' {
+    declare type PuppeteerHTMLElementType = {};
+
     declare type PageScreenshotOptionsType = {
         path: string,
     };
@@ -10,6 +12,9 @@ declare module 'puppeteer' {
         screenshot(options: PageScreenshotOptionsType): Promise<mixed>,
         click(cssSelector: string): Promise<mixed>,
         type(cssSelector: string, text: string): Promise<mixed>,
+        $(cssSelector: string): Promise<PuppeteerHTMLElementType | null>,
+        evaluate<T>(funcOrStringFunc: ((() => T) | string)): Promise<T>,
+        url(): string,
     }
 
     declare class Browser {
