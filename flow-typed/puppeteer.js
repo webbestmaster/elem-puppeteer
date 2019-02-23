@@ -15,6 +15,7 @@ declare module 'puppeteer' {
         $(cssSelector: string): Promise<PuppeteerHTMLElementType | null>,
         evaluate<T>(funcOrStringFunc: ((() => T) | string)): Promise<T>,
         url(): string,
+        waitFor(timeoutInMs: number): Promise<mixed>,
     }
 
     declare class Browser {
