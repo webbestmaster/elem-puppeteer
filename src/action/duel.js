@@ -12,15 +12,28 @@ async function hasAvailableDuel(page: Page): Promise<boolean> {
 }
 
 async function isIntoDuel(page: Page): Promise<boolean> {
-    const url = page.url();
+    if (await isEndOfDuel(page)) {
+        return false;
+    }
 
-    // check duel id
-    const extraPart = url.replace(appConst.site.duel, '').replace('/\\/gi', '');
-
-    return /\d{8,10}/.test(extraPart);
+    return /duel\/\d{8,10}/.test(page.url());
 }
 
-export async function findEnemyForDuel(page: Page, browser: Browser) {
+async function isEndOfDuel(page: Page): Promise<boolean> {
+    const isNeededUrl = /duel\/\d{8,10}/.test(page.url());
+
+    if (isNeededUrl === false) {
+        return false;
+    }
+
+    const messagesLength: string | number = await page.evaluate<
+        string | number
+    >('document.querySelectorAll(\'.nm_txt_in\').length');
+
+    return parseInt(messagesLength, 10) === 1;
+}
+
+export async function findEnemyForDuel(page: Page) {
     const currentHp = await getUserFullHp(page);
 
     const enemyHpRaw: string = await page.evaluate<string>(
@@ -31,36 +44,150 @@ export async function findEnemyForDuel(page: Page, browser: Browser) {
 
     console.log('---> enemy hp:', enemyHp);
 
-    if (enemyHp >= currentHp * 0.95) {
+    if (enemyHp >= currentHp * 1.1) {
         await page.waitFor(1e3);
         await page.goto(page.url());
-        await findEnemyForDuel(page, browser);
+        await findEnemyForDuel(page);
         return;
     }
 }
 
-async function doFight(page: Page, browser: Browser) {}
+type DuelPairCardType = {|
+    +attack: number,
+    +reverse: number,
+    +ratio: number,
+    +index: number,
+|};
 
-export async function duel(page: Page, browser: Browser) {
+type DuelAttackResultType = {|
+    +damage: {|
+        +given: number,
+        +received: number,
+    |},
+    +result: number,
+|};
+
+function getAttackResult(cardPair: DuelPairCardType): DuelAttackResultType {
+    const given = cardPair.attack * cardPair.ratio;
+
+    let received = cardPair.reverse;
+
+    if (cardPair.ratio === 1.5) {
+        received *= 0.5;
+    }
+
+    if (cardPair.ratio === 0.5) {
+        received *= 1.5;
+    }
+
+    return {
+        damage: {
+            given,
+            received,
+        },
+        result: given - received,
+    };
+}
+
+async function getDuelPairCardDataByCardNumber(
+    index: number,
+    page: Page
+): Promise<DuelPairCardType> {
+    const attackRaw: string = await page.evaluate<string>(
+        `document.querySelector('.fb_path:nth-child(${index +
+            1}) .card.active.at .stat').innerText`
+    );
+
+    const reverseRaw: string = await page.evaluate<string>(
+        `document.querySelector('.fb_path:nth-child(${index +
+            1}) .card.chide66.at .stat').innerText`
+    );
+
+    const ratioRaw: string = await page.evaluate<string>(
+        `document.querySelector('.fb_path:nth-child(${index +
+            1}) .dmg_coef span').innerText`
+    );
+
+    return {
+        attack: parseInt(attackRaw.replace(/\D/gi, ''), 10),
+        reverse: parseInt(reverseRaw.replace(/\D/gi, ''), 10),
+        ratio: parseFloat(ratioRaw.trim()),
+        index,
+    };
+}
+
+async function getDuelPairCardList(
+    page: Page
+): Promise<Array<DuelPairCardType>> {
+    return await Promise.all(
+        [0, 1, 2].map(
+            (index: number): Promise<DuelPairCardType> =>
+                getDuelPairCardDataByCardNumber(index, page)
+        )
+    );
+}
+
+async function doDuelFight(page: Page) {
+    const duelCardList = await getDuelPairCardList(page);
+
+    const pairCard = duelCardList.sort(
+        (pair1: DuelPairCardType, pair2: DuelPairCardType): number => {
+            return (
+                getAttackResult(pair2).result - getAttackResult(pair1).result
+            );
+        }
+    )[0];
+
+    await page.click(`.fb_path:nth-child(${pairCard.index + 1}) a`);
+
+    await page.waitFor(1e3);
+
+    if (await isIntoDuel(page)) {
+        console.log('---> you into duel, fight!');
+        await doDuelFight(page);
+        return;
+    }
+
+    console.log('---> end of duel!');
+
+    await page.waitFor(1e3);
+    await duel(page);
+
+    console.log(duelCardList);
+    console.log(pairCard);
+}
+
+export async function duel(page: Page, browser?: Browser) {
     await page.goto(appConst.site.duel);
 
     const currentHp = await getUserFullHp(page);
 
     console.log('---> current hp:', currentHp);
 
-    if (await isIntoDuel(page)) {
-        console.log('---> you into duel, fight!');
+    if (await isEndOfDuel(page)) {
+        await page.waitFor(1e3);
+        await page.goto(appConst.site.duel);
         return;
     }
 
-    if (!hasAvailableDuel(page)) {
+    if (await isIntoDuel(page)) {
+        console.log('---> you into duel, fight!');
+        await doDuelFight(page);
+        return;
+    }
+
+    if (!await hasAvailableDuel(page)) {
         console.log('---> NO available duel');
         return;
     }
 
-    await findEnemyForDuel(page, browser);
+    await findEnemyForDuel(page);
 
-    await page.goto('/duel/tobattle/');
+    await page.goto(appConst.site.duel + '/tobattle/');
+
+    await doDuelFight(page);
+
+    await page.waitFor(10e3);
 
     console.log('you can run fight');
 }
