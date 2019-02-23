@@ -20,11 +20,21 @@ export async function watch(page: Page, browser: Browser) {
 */
 
     chain
-        .then((): mixed => console.log('---> End of loop'))
+        .then(
+            async (): mixed => {
+                console.log('---> End of loop');
+                await page.waitFor(3e3);
+                return watch(page, browser);
+            }
+        )
         .catch(
-            (error: Error): Error => {
+            async (error: Error): Promise<Error> => {
                 console.log('---> EXIT from WATCH with ERROR! <---');
                 console.log(error);
+
+                await page.waitFor(3e3);
+                await watch(page, browser);
+
                 return error;
             }
         );
