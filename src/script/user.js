@@ -35,5 +35,11 @@ export async function getUserFullHp(page: Page): Promise<number> {
             );
     }
 
-    return parseInt(result.replace(/\D/gi, ''), 10);
+    let hpQ = 1;
+
+    if (result.includes('K')) {
+        hpQ = 1000;
+    }
+
+    return parseFloat(result.trim()) * hpQ;
 }
