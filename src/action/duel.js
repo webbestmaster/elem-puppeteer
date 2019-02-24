@@ -131,7 +131,7 @@ async function getDuelPairCardDataByCardNumber(
 async function getDuelPairCardList(
     page: Page
 ): Promise<Array<DuelPairCardType>> {
-    console.log('---> function: doDuelFight');
+    console.log('---> function: getDuelPairCardList');
 
     return await Promise.all(
         [0, 1, 2].map(
@@ -154,7 +154,12 @@ async function doDuelFight(page: Page) {
         }
     )[0];
 
-    await page.click(`.fb_path:nth-child(${pairCard.index + 1}) a`);
+    const newFightUrl: string = await page.evaluate<string>(
+        `document.querySelector('.fb_path:nth-child(${pairCard.index +
+            1}) a').getAttribute('href')`
+    );
+
+    await page.goto(appConst.site.url + newFightUrl);
 
     await page.waitFor(1e3);
 
