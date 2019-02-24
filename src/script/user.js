@@ -41,5 +41,5 @@ export async function getUserFullHp(page: Page): Promise<number> {
         hpQ = 1000;
     }
 
-    return parseFloat(result.trim()) * hpQ;
+    return parseFloat(result.replace(/\s/, '')) * hpQ;
 }
