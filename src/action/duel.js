@@ -172,7 +172,6 @@ async function doDuelFight(page: Page) {
     console.log('---> end of duel!');
 
     await page.waitFor(1e3);
-    await duel(page);
 }
 
 // eslint-disable-next-line max-statements
@@ -213,9 +212,10 @@ export async function duel(page: Page, browser?: Browser) {
 
     await doDuelFight(page);
 
+    await page.waitFor(1e3);
+
     console.log('---> doDuelFight is over');
+    console.log('---> Start new duel process');
 
-    await page.waitFor(10e3);
-
-    console.log('you can run fight');
+    await duel(page);
 }
