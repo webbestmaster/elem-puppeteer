@@ -5,6 +5,8 @@
 import type {Page, Browser} from 'puppeteer';
 
 export async function getUserFullHp(page: Page): Promise<number> {
+    console.log('---> function: getUserFullHp');
+
     const defaultValue = '0';
 
     let result: string = await page

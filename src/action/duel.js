@@ -6,12 +6,16 @@ import {appConst} from '../const';
 import {getUserFullHp} from '../script/user';
 
 async function hasAvailableDuel(page: Page): Promise<boolean> {
+    console.log('---> function: hasAvailableDuel');
+
     const button = await page.$('a[href="/duel/tobattle/"]');
 
     return Boolean(button);
 }
 
 async function isIntoDuel(page: Page): Promise<boolean> {
+    console.log('---> function: isIntoDuel');
+
     if (await isEndOfDuel(page)) {
         return false;
     }
@@ -20,6 +24,8 @@ async function isIntoDuel(page: Page): Promise<boolean> {
 }
 
 async function isEndOfDuel(page: Page): Promise<boolean> {
+    console.log('---> function: isEndOfDuel');
+
     const isNeededUrl = /duel\/\d{8,10}/.test(page.url());
 
     if (isNeededUrl === false) {
@@ -34,6 +40,8 @@ async function isEndOfDuel(page: Page): Promise<boolean> {
 }
 
 export async function findEnemyForDuel(page: Page) {
+    console.log('---> action: findEnemyForDuel');
+
     const currentHp = await getUserFullHp(page);
 
     const enemyHpRaw: string = await page.evaluate<string>(
@@ -68,6 +76,8 @@ type DuelAttackResultType = {|
 |};
 
 function getAttackResult(cardPair: DuelPairCardType): DuelAttackResultType {
+    console.log('---> function: getAttackResult');
+
     const given = cardPair.attack * cardPair.ratio;
 
     let received = cardPair.reverse;
@@ -93,6 +103,8 @@ async function getDuelPairCardDataByCardNumber(
     index: number,
     page: Page
 ): Promise<DuelPairCardType> {
+    console.log('---> function: getDuelPairCardDataByCardNumber');
+
     const attackRaw: string = await page.evaluate<string>(
         `document.querySelector('.fb_path:nth-child(${index +
             1}) .card.active.at .stat').innerText`
@@ -119,6 +131,8 @@ async function getDuelPairCardDataByCardNumber(
 async function getDuelPairCardList(
     page: Page
 ): Promise<Array<DuelPairCardType>> {
+    console.log('---> function: doDuelFight');
+
     return await Promise.all(
         [0, 1, 2].map(
             (index: number): Promise<DuelPairCardType> =>
@@ -128,6 +142,8 @@ async function getDuelPairCardList(
 }
 
 async function doDuelFight(page: Page) {
+    console.log('---> action: doDuelFight');
+
     const duelCardList = await getDuelPairCardList(page);
 
     const pairCard = duelCardList.sort(
@@ -152,12 +168,12 @@ async function doDuelFight(page: Page) {
 
     await page.waitFor(1e3);
     await duel(page);
-
-    console.log(duelCardList);
-    console.log(pairCard);
 }
 
+// eslint-disable-next-line max-statements
 export async function duel(page: Page, browser?: Browser) {
+    console.log('---> action: duel');
+
     await page.goto(appConst.site.duel);
 
     const currentHp = await getUserFullHp(page);
@@ -165,6 +181,7 @@ export async function duel(page: Page, browser?: Browser) {
     console.log('---> current hp:', currentHp);
 
     if (await isEndOfDuel(page)) {
+        console.log('---> action: duel ---> isEndOfDuel');
         await page.waitFor(1e3);
         await page.goto(appConst.site.duel);
         return;
@@ -183,9 +200,15 @@ export async function duel(page: Page, browser?: Browser) {
 
     await findEnemyForDuel(page);
 
+    console.log('---> action: duel ---> findEnemyForDuel');
+
     await page.goto(appConst.site.duel + '/tobattle/');
 
+    await page.waitFor(1e3);
+
     await doDuelFight(page);
+
+    console.log('---> doDuelFight is over');
 
     await page.waitFor(10e3);
 
