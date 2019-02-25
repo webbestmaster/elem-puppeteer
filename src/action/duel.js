@@ -52,7 +52,7 @@ export async function findEnemyForDuel(page: Page) {
 
     console.log('---> enemy hp:', enemyHp);
 
-    if (enemyHp >= currentHp * 0.999) {
+    if (enemyHp >= currentHp * 1.05) {
         await page.waitFor(1e3);
         await page.goto(page.url());
         await findEnemyForDuel(page);
