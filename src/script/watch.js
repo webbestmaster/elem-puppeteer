@@ -9,6 +9,8 @@ export async function watch(page: Page, browser: Browser) {
         await duel(page, browser);
     } catch (error) {
         console.error('---> ERROR: ! duel !');
+        console.error('---> Page URL:', page.url());
+        await page.screenshot({path: './screenshot/duel-error.png'});
         console.error(error);
     }
 
