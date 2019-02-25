@@ -1,9 +1,24 @@
+на странице - http://elem.mobi/urfin/ есть кнопка "далее" (http://elem.mobi/urfin/next/) её нужно нажать
+она перекинет на http://elem.mobi/urfin/ - там будет кнопка "напасть" (http://elem.mobi/urfin/start/)
+
+можна на эту кнопку "напасть" не жать, а сразу переходить по ссылке http://elem.mobi/urfin/start/confirmed/ - она сразу будет вести на бой
+
+
+
 http://elem.mobi/urfin/start/confirmed/ - заплатить 10 золота и фигачить в ручную
 
 < вот тут будет дуэль, походу дуэль точно такая же как и обчная дуэль только с той разнице что тут пропадают карты и нужно жать кнопку обновить>
 
 http://elem.mobi/urfin/battle/attack2/8VO4pkO0/ - после боя - после боя можно сразу переходить по /urfin/start/confirmed/ оне же потом редиректнет на http://elem.mobi/urfin/battle/
 на этой же странице есть ссылка <a href="/urfin/" class="btn bli mlra w140px sll"> - по ней можно съориентироваться что бой закнчен
+
+потом нужно перйти на ссылке <a href="/urfin/" class="btn bli mlra w140px sll"> и посчитать кол-во нападений на босса
+вот ('.small.c_da.mt10.cntr') в этом элементе будет такой текст
+
+			Вы нападали 3 раза
+			Вы нанесли урон 123 439
+
+из него нужно вырвать кол-во боёв
 
 http://elem.mobi/urfin/battle/ - ссылка на бой с урфином - она же обновляет страницу - она же см - http://elem.mobi/urfin/battle/attack2/8VO4pkO0/
 
