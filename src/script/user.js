@@ -30,7 +30,7 @@ export async function getUserFullHp(page: Page): Promise<number> {
                     console.log(
                         '---> can not get user hp from right middle node (in duel)'
                     );
-                    return '0';
+                    return defaultValue;
                 }
             );
     }
