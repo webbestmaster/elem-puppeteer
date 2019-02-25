@@ -5,7 +5,13 @@ import type {Page, Browser} from 'puppeteer';
 import {duel} from '../action/duel';
 
 export async function watch(page: Page, browser: Browser) {
-    await duel(page, browser);
+    try {
+        await duel(page, browser);
+    } catch (error) {
+        console.error('---> ERROR: ! duel !');
+        console.error(error);
+    }
+
     await page.waitFor(10e3);
 
     console.log('---> End of loop');
