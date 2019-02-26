@@ -42,6 +42,8 @@ async function isEndOfDuel(page: Page): Promise<boolean> {
 export async function findEnemyForDuel(page: Page) {
     console.log('---> action: findEnemyForDuel');
 
+    const hpQ = 1;
+
     const currentHp = await getUserFullHp(page);
 
     const enemyHpRaw: string = await page.evaluate<string>(
@@ -52,7 +54,7 @@ export async function findEnemyForDuel(page: Page) {
 
     console.log('---> enemy hp:', enemyHp);
 
-    if (enemyHp >= currentHp * 1.1) {
+    if (enemyHp >= currentHp * hpQ) {
         await page.waitFor(1e3);
         await page.goto(page.url());
         await findEnemyForDuel(page);
