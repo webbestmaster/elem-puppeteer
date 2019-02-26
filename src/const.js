@@ -6,5 +6,6 @@ export const appConst = {
     site: {
         url: siteUrl,
         duel: `${siteUrl}/duel`,
+        urfin: `${siteUrl}/urfin`,
     },
 };
