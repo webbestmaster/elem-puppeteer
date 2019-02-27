@@ -42,7 +42,7 @@ async function isEndOfDuel(page: Page): Promise<boolean> {
 export async function findEnemyForDuel(page: Page) {
     console.log('---> action: findEnemyForDuel');
 
-    const duelHpQ = 0.9;
+    const duelHpQ = 0.98;
 
     const currentHp = await getUserFullHp(page);
 
