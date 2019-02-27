@@ -3,6 +3,7 @@
 import type {Page, Browser} from 'puppeteer';
 
 import {duel} from '../action/duel';
+import {arena} from '../action/arena';
 
 export async function watch(page: Page, browser: Browser) {
     try {
@@ -13,6 +14,17 @@ export async function watch(page: Page, browser: Browser) {
         await page.screenshot({path: './screenshot/duel-error.png'});
         console.error(error);
     }
+
+    /*
+    try {
+        await arena(page, browser);
+    } catch (error) {
+        console.error('---> ERROR: ! arena !');
+        console.error('---> Page URL:', page.url());
+        await page.screenshot({path: './screenshot/arena-error.png'});
+        console.error(error);
+    }
+*/
 
     await page.waitFor(10e3);
 
