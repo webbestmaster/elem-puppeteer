@@ -5,18 +5,19 @@ import type {Page, Browser} from 'puppeteer';
 import {appConst} from '../const';
 
 const maxAttackCount = 15;
+const timeout = 100;
 
 async function urfinStart(page: Page) {
     console.log('---> action: urfinStart');
 
     await page.goto(appConst.site.urfin + '/');
-    await page.waitFor(1e3);
+    await page.waitFor(timeout);
 
     await page.goto(appConst.site.urfin + '/next/');
-    await page.waitFor(1e3);
+    await page.waitFor(timeout);
 
     await page.goto(appConst.site.urfin + '/start/');
-    await page.waitFor(1e3);
+    await page.waitFor(timeout);
 }
 
 async function urfinFightGetLinkListByIndex(
@@ -103,14 +104,14 @@ async function urfinFightToDie(page: Page) {
     if (linkList.length === 0) {
         // press refresh button to show more cards
         await page.goto(appConst.site.urfin + '/battle/');
-        await page.waitFor(1e3);
+        await page.waitFor(timeout * 10);
 
         await urfinFightToDie(page);
         return;
     }
 
     await page.goto(appConst.site.url + linkList[0]);
-    await page.waitFor(1e3);
+    await page.waitFor(timeout);
 
     await urfinFightToDie(page);
 }
@@ -119,7 +120,7 @@ async function urfinFight(page: Page) {
     console.log('---> action: urfinFight');
 
     await page.goto(appConst.site.urfin + '/start/confirmed/');
-    await page.waitFor(1e3);
+    await page.waitFor(timeout);
 
     await urfinFightToDie(page);
 }
@@ -128,7 +129,7 @@ export async function urfin(page: Page, browser?: Browser) {
     console.log('---> action: urfin');
 
     await urfinStart(page);
-    await page.waitFor(1e3);
+    await page.waitFor(timeout);
 
     const attackCount = await getAttackCount(page);
 
