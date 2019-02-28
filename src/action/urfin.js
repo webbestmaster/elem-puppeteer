@@ -4,6 +4,8 @@ import type {Page, Browser} from 'puppeteer';
 
 import {appConst} from '../const';
 
+const maxAttackCount = 15;
+
 async function urfinStart(page: Page) {
     console.log('---> action: urfinStart');
 
@@ -59,13 +61,40 @@ async function isBattleEnd(page: Page): Promise<boolean> {
     return Boolean(linkToNewBattle);
 }
 
+async function getAttackCount(page: Page): Promise<number> {
+    const errorCount = -1;
+
+    try {
+        const innerText = await page.evaluate<string>(
+            'document.querySelector(\'.small.c_da.mt10.cntr\').innerText'
+        );
+
+        const match = innerText.match(/\d+/gi);
+
+        if (!match) {
+            return errorCount;
+        }
+
+        return parseInt(match[0], 10);
+    } catch (error) {
+        return errorCount;
+    }
+}
+
 async function urfinFightToDie(page: Page) {
     console.log('---> action: urfinFightToDie');
 
     if (await isBattleEnd(page)) {
         await page.goto(appConst.site.urfin + '/');
-        // TODO: check count of attack and attack if needed
-        // urfinFight() to more attack
+
+        const attackCount = await getAttackCount(page);
+
+        console.log('---> Urfin attack count:', attackCount);
+        console.log('---> Max attack count:', maxAttackCount);
+
+        if (attackCount < maxAttackCount) {
+            await urfinFight(page);
+        }
         return;
     }
 
@@ -101,5 +130,12 @@ export async function urfin(page: Page, browser?: Browser) {
     await urfinStart(page);
     await page.waitFor(1e3);
 
-    await urfinFight(page);
+    const attackCount = await getAttackCount(page);
+
+    console.log('---> Urfin attack count:', attackCount);
+    console.log('---> Max attack count:', maxAttackCount);
+
+    if (attackCount < maxAttackCount) {
+        await urfinFight(page);
+    }
 }
