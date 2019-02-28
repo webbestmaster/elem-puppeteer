@@ -125,11 +125,33 @@ async function urfinFight(page: Page) {
     await urfinFightToDie(page);
 }
 
+async function isUrfinInBattle(page: Page): Promise<boolean> {
+    let isInBattle: boolean = true;
+
+    await page
+        .evaluate<string>(
+            'document.querySelector(\'img[src="/img/ico36-reload.png"]]\').getAttribute(\'src\')'
+        )
+        .catch(
+            (): boolean => {
+                isInBattle = false;
+                return true;
+            }
+        );
+
+    return isInBattle;
+}
+
 export async function urfin(page: Page, browser?: Browser) {
     console.log('---> action: urfin');
 
     await urfinStart(page);
     await page.waitFor(timeout);
+
+    if (await isUrfinInBattle(page)) {
+        await urfinFightToDie(page);
+        return;
+    }
 
     const attackCount = await getAttackCount(page);
 
