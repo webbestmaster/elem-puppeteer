@@ -4,7 +4,7 @@ import type {Page, Browser} from 'puppeteer';
 
 import {appConst} from '../const';
 
-const maxAttackCount = 15;
+const maxAttackCount = 10;
 const timeout = 100;
 
 async function urfinStart(page: Page) {
