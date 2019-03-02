@@ -5,7 +5,7 @@ import type {UserDataType} from './flow-types/user';
 export const userList: Array<UserDataType> = [
     {
         login: 'WebMaster',
-        password: '',
+        password: '___',
         iFrameUrl: '',
         urfin: {
             maxAttack: -1,
@@ -21,7 +21,7 @@ export const userList: Array<UserDataType> = [
     {
         login: '',
         password: '',
-        iFrameUrl: 'https://mailru.elem.mobi?foo=bar',
+        iFrameUrl: 'https://mailru.elem.mobi/?foo=bar',
         urfin: {
             maxAttack: 15,
         },
@@ -33,29 +33,33 @@ export const userList: Array<UserDataType> = [
         },
     },
 
-    /*
     {
         login: 'Убийца',
-        password: '__',
+        password: '___',
+        iFrameUrl: '',
         urfin: {
             maxAttack: 15,
         },
-        siteUrl: {
+        site: {
             url: 'http://elem.mobi',
             duel: '/duel',
             urfin: '/urfin',
             arena: '/survival',
-        }
+        },
     },
-    */
 
-    /*
     {
         login: 'Legione',
-        password: '__',
+        password: '___',
+        iFrameUrl: '',
         urfin: {
-            maxAttack: 10
-        }
+            maxAttack: 7,
+        },
+        site: {
+            url: 'http://elem.mobi',
+            duel: '/duel',
+            urfin: '/urfin',
+            arena: '/survival',
+        },
     },
-    */
 ];

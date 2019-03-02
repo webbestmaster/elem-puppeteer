@@ -2,7 +2,7 @@
 
 /* global document */
 
-import type {Page, Browser} from 'puppeteer';
+import type {Browser, Page} from 'puppeteer';
 
 export async function getUserFullHp(page: Page): Promise<number> {
     console.log('---> function: getUserFullHp');

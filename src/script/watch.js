@@ -1,10 +1,8 @@
 // @flow
 
-import type {Page, Browser} from 'puppeteer';
+import type {Browser, Page} from 'puppeteer';
 
 import {duel} from '../action/duel';
-import {arena} from '../action/arena';
-import {urfin} from '../action/urfin';
 import type {UserDataType} from '../flow-types/user';
 
 export async function watch(page: Page, userData: UserDataType) {

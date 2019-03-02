@@ -1,6 +1,6 @@
 // @flow
 
-import type {Page, Browser} from 'puppeteer';
+import type {Browser, Page} from 'puppeteer';
 
 import {getUserFullHp} from '../script/user';
 import type {UserDataType} from '../flow-types/user';

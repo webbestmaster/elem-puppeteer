@@ -1,7 +1,6 @@
 // @flow
 
-import type {Page, Browser} from 'puppeteer';
-
+import type {Browser, Page} from 'puppeteer';
 // import {appConst} from '../const';
 import type {UserDataType} from '../flow-types/user';
 
