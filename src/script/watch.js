@@ -26,7 +26,7 @@ export async function watch(page: Page, userData: UserDataType) {
         await page.screenshot({path: './screenshot/urfin-error.png'});
         console.error(error);
     }
-*/
+    */
 
     /*
     try {
@@ -37,7 +37,7 @@ export async function watch(page: Page, userData: UserDataType) {
         await page.screenshot({path: './screenshot/arena-error.png'});
         console.error(error);
     }
-*/
+    */
 
     await page.waitFor(10e3);
 

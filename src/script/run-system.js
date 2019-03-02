@@ -12,7 +12,5 @@ export async function runSystem(
     const browser = await puppeteer.launch({headless: false, slowMo: 50});
     const page = await browser.newPage();
 
-    await page.goto(userData.site.url);
-
     return {page, browser};
 }
