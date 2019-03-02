@@ -21,8 +21,7 @@ export const userList: Array<UserDataType> = [
     {
         login: '',
         password: '',
-        iFrameUrl:
-            '',
+        iFrameUrl: 'https://mailru.elem.mobi?foo=bar',
         urfin: {
             maxAttack: 15,
         },
