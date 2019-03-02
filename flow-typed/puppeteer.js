@@ -16,6 +16,7 @@ declare module 'puppeteer' {
         evaluate<T>(funcOrStringFunc: ((() => T) | string)): Promise<T>,
         url(): string,
         waitFor(timeoutInMs: number): Promise<mixed>,
+        setViewport(size: {width: number, height: number}): Promise<mixed>,
     }
 
     declare class Browser {
@@ -26,6 +27,7 @@ declare module 'puppeteer' {
     declare type LaunchOptionsType = {
         headless?: boolean,
         slowMo?: number,
+        args?: Array<string>, // example '--window-size=384,480'
     }
 
     declare function launch(launchOptions: LaunchOptionsType): Browser;

@@ -3,10 +3,30 @@
 import type {Page} from 'puppeteer';
 
 import {login} from './script/login';
-import {watch} from './script/watch';
 import {runSystem} from './script/run-system';
 import type {UserDataType} from './flow-types/user';
 import {userList} from './user-list.js';
+import {urfinHandle} from './action/urfin-handle';
+
+async function watch(page: Page, userData: UserDataType) {
+    try {
+        await urfinHandle(page, userData);
+    } catch (error) {
+        console.error('---> ERROR: ! urfin !');
+        console.error('---> Page URL:', page.url());
+        await page.screenshot({path: './screenshot/urfin-error.png'});
+        console.error(error);
+    }
+
+    await page.waitFor(10e3);
+
+    console.log('---> End of loop');
+    console.log('---> Timeout 1 minutes');
+
+    await page.waitFor(60e3); // 1 minute
+
+    await watch(page, userData);
+}
 
 async function run(userData: UserDataType) {
     const {page, browser} = await runSystem(userData);

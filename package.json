@@ -14,7 +14,9 @@
   },
   "homepage": "https://github.com/webbestmaster/elem-puppeteer#readme",
   "scripts": {
-    "pup": "nodemon --exec babel-node ./src/main.js",
+    "urfin-handle": "nodemon --exec babel-node ./src/main-urfin-handle.js",
+    "urfin-auto": "nodemon --exec babel-node ./src/main-urfin-auto.js",
+    "duel": "nodemon --exec babel-node ./src/main-duel.js",
     "check": "npm run eslint; npm run flow;",
     "check:fix": "npm run prettier; npm run eslint:fix; npm run flow;",
     "eslint": "eslint .",

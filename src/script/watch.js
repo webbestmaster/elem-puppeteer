@@ -4,8 +4,10 @@ import type {Browser, Page} from 'puppeteer';
 
 import {duel} from '../action/duel';
 import type {UserDataType} from '../flow-types/user';
+import {urfinHandle} from '../action/urfin-handle';
 
 export async function watch(page: Page, userData: UserDataType) {
+    /*
     try {
         await duel(page, userData);
     } catch (error) {
@@ -14,17 +16,15 @@ export async function watch(page: Page, userData: UserDataType) {
         await page.screenshot({path: './screenshot/duel-error.png'});
         console.error(error);
     }
-
-    /*
+    */
     try {
-        await urfin(page, userData);
+        await urfinHandle(page, userData);
     } catch (error) {
         console.error('---> ERROR: ! urfin !');
         console.error('---> Page URL:', page.url());
         await page.screenshot({path: './screenshot/urfin-error.png'});
         console.error(error);
     }
-    */
 
     /*
     try {

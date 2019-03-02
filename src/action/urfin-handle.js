@@ -1,6 +1,7 @@
 // @flow
 
 import type {Browser, Page} from 'puppeteer';
+
 // import {appConst} from '../const';
 import type {UserDataType} from '../flow-types/user';
 
@@ -144,7 +145,7 @@ async function isUrfinInBattle(page: Page): Promise<boolean> {
     return isInBattle;
 }
 
-export async function urfin(page: Page, userData: UserDataType) {
+export async function urfinHandle(page: Page, userData: UserDataType) {
     console.log('---> action: urfin');
 
     await urfinStart(page, userData);
