@@ -2,8 +2,8 @@
 
 import type {Page, Browser} from 'puppeteer';
 
-import {appConst} from '../const';
 import {getUserFullHp} from '../script/user';
+import type {UserDataType} from '../flow-types/user';
 
 async function hasAvailableDuel(page: Page): Promise<boolean> {
     console.log('---> function: hasAvailableDuel');
@@ -143,7 +143,7 @@ async function getDuelPairCardList(
     );
 }
 
-async function doDuelFight(page: Page) {
+async function doDuelFight(page: Page, userData: UserDataType) {
     console.log('---> action: doDuelFight');
 
     const duelCardList = await getDuelPairCardList(page);
@@ -161,13 +161,13 @@ async function doDuelFight(page: Page) {
             1}) a').getAttribute('href')`
     );
 
-    await page.goto(appConst.site.url + newFightUrl);
+    await page.goto(userData.site.url + newFightUrl);
 
     await page.waitFor(1e3);
 
     if (await isIntoDuel(page)) {
         console.log('---> you into duel, fight!');
-        await doDuelFight(page);
+        await doDuelFight(page, userData);
         return;
     }
 
@@ -177,10 +177,10 @@ async function doDuelFight(page: Page) {
 }
 
 // eslint-disable-next-line max-statements
-export async function duel(page: Page, browser?: Browser) {
+export async function duel(page: Page, userData: UserDataType) {
     console.log('---> action: duel');
 
-    await page.goto(appConst.site.duel);
+    await page.goto(userData.site.url + userData.site.duel);
 
     const currentHp = await getUserFullHp(page);
 
@@ -189,13 +189,13 @@ export async function duel(page: Page, browser?: Browser) {
     if (await isEndOfDuel(page)) {
         console.log('---> action: duel ---> isEndOfDuel');
         await page.waitFor(1e3);
-        await page.goto(appConst.site.duel);
+        await page.goto(userData.site.url + userData.site.duel);
         return;
     }
 
     if (await isIntoDuel(page)) {
         console.log('---> you into duel, fight!');
-        await doDuelFight(page);
+        await doDuelFight(page, userData);
         return;
     }
 
@@ -208,16 +208,16 @@ export async function duel(page: Page, browser?: Browser) {
 
     console.log('---> action: duel ---> findEnemyForDuel');
 
-    await page.goto(appConst.site.duel + '/tobattle/');
+    await page.goto(userData.site.url + userData.site.duel + '/tobattle/');
 
     await page.waitFor(1e3);
 
-    await doDuelFight(page);
+    await doDuelFight(page, userData);
 
     await page.waitFor(1e3);
 
     console.log('---> doDuelFight is over');
     console.log('---> Start new duel process');
 
-    await duel(page);
+    await duel(page, userData);
 }

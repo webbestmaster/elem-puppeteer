@@ -12,7 +12,7 @@ const loginSelector = {
 };
 
 export async function login(page: Page, userData: UserDataType) {
-    const {login: userLogin, password} = userData;
+    const {login: userLogin, password, iFrameUrl} = userData;
 
     if (typeof userLogin === 'string' && typeof password === 'string') {
         await page.click(loginSelector.loginLink);
@@ -24,6 +24,9 @@ export async function login(page: Page, userData: UserDataType) {
         await page.click(loginSelector.loginFormSubmitButton);
 
         return;
+    }
+
+    if (typeof iFrameUrl === 'string') {
     }
 
     throw new Error('Login and Pass needed');

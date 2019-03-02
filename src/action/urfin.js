@@ -2,21 +2,22 @@
 
 import type {Page, Browser} from 'puppeteer';
 
-import {appConst} from '../const';
+// import {appConst} from '../const';
+import type {UserDataType} from '../flow-types/user';
 
-const maxAttackCount = 10;
+const maxAttackCount = 15;
 const timeout = 100;
 
-async function urfinStart(page: Page) {
+async function urfinStart(page: Page, userData: UserDataType) {
     console.log('---> action: urfinStart');
 
-    await page.goto(appConst.site.urfin + '/');
+    await page.goto(userData.site.url + userData.site.urfin + '/');
     await page.waitFor(timeout);
 
-    await page.goto(appConst.site.urfin + '/next/');
+    await page.goto(userData.site.url + userData.site.urfin + '/next/');
     await page.waitFor(timeout);
 
-    await page.goto(appConst.site.urfin + '/start/');
+    await page.goto(userData.site.url + userData.site.urfin + '/start/');
     await page.waitFor(timeout);
 }
 
@@ -82,11 +83,11 @@ async function getAttackCount(page: Page): Promise<number> {
     }
 }
 
-async function urfinFightToDie(page: Page) {
+async function urfinFightToDie(page: Page, userData: UserDataType) {
     console.log('---> action: urfinFightToDie');
 
     if (await isBattleEnd(page)) {
-        await page.goto(appConst.site.urfin + '/');
+        await page.goto(userData.site.url + userData.site.urfin + '/');
 
         const attackCount = await getAttackCount(page);
 
@@ -94,7 +95,7 @@ async function urfinFightToDie(page: Page) {
         console.log('---> Max attack count:', maxAttackCount);
 
         if (attackCount < maxAttackCount) {
-            await urfinFight(page);
+            await urfinFight(page, userData);
         }
         return;
     }
@@ -103,26 +104,28 @@ async function urfinFightToDie(page: Page) {
 
     if (linkList.length === 0) {
         // press refresh button to show more cards
-        await page.goto(appConst.site.urfin + '/battle/');
+        await page.goto(userData.site.url + userData.site.urfin + '/battle/');
         await page.waitFor(timeout * 10);
 
-        await urfinFightToDie(page);
+        await urfinFightToDie(page, userData);
         return;
     }
 
-    await page.goto(appConst.site.url + linkList[0]);
+    await page.goto(userData.site.url + linkList[0]);
     await page.waitFor(timeout);
 
-    await urfinFightToDie(page);
+    await urfinFightToDie(page, userData);
 }
 
-async function urfinFight(page: Page) {
+async function urfinFight(page: Page, userData: UserDataType) {
     console.log('---> action: urfinFight');
 
-    await page.goto(appConst.site.urfin + '/start/confirmed/');
+    await page.goto(
+        userData.site.url + userData.site.urfin + '/start/confirmed/'
+    );
     await page.waitFor(timeout);
 
-    await urfinFightToDie(page);
+    await urfinFightToDie(page, userData);
 }
 
 async function isUrfinInBattle(page: Page): Promise<boolean> {
@@ -142,14 +145,14 @@ async function isUrfinInBattle(page: Page): Promise<boolean> {
     return isInBattle;
 }
 
-export async function urfin(page: Page, browser?: Browser) {
+export async function urfin(page: Page, userData: UserDataType) {
     console.log('---> action: urfin');
 
-    await urfinStart(page);
+    await urfinStart(page, userData);
     await page.waitFor(timeout);
 
     if (await isUrfinInBattle(page)) {
-        await urfinFightToDie(page);
+        await urfinFightToDie(page, userData);
         return;
     }
 
@@ -159,6 +162,6 @@ export async function urfin(page: Page, browser?: Browser) {
     console.log('---> Max attack count:', maxAttackCount);
 
     if (attackCount < maxAttackCount) {
-        await urfinFight(page);
+        await urfinFight(page, userData);
     }
 }

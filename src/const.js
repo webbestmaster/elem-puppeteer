@@ -1,5 +1,6 @@
 // @flow
 
+/*
 const siteUrl = 'http://elem.mobi';
 
 export const appConst = {
@@ -10,3 +11,4 @@ export const appConst = {
         arena: `${siteUrl}/survival`,
     },
 };
+*/
