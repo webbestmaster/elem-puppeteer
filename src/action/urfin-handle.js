@@ -5,7 +5,6 @@ import type {Browser, Page} from 'puppeteer';
 // import {appConst} from '../const';
 import type {UserDataType} from '../flow-types/user';
 
-const maxAttackCount = 15;
 const timeout = 100;
 
 async function urfinStart(page: Page, userData: UserDataType) {
@@ -92,9 +91,9 @@ async function urfinFightToDie(page: Page, userData: UserDataType) {
         const attackCount = await getAttackCount(page);
 
         console.log('---> Urfin attack count:', attackCount);
-        console.log('---> Max attack count:', maxAttackCount);
+        console.log('---> Max attack count:', userData.urfin.maxAttack);
 
-        if (attackCount < maxAttackCount) {
+        if (attackCount < userData.urfin.maxAttack) {
             await urfinFight(page, userData);
         }
         return;
@@ -159,9 +158,9 @@ export async function urfinHandle(page: Page, userData: UserDataType) {
     const attackCount = await getAttackCount(page);
 
     console.log('---> Urfin attack count:', attackCount);
-    console.log('---> Max attack count:', maxAttackCount);
+    console.log('---> Max attack count:', userData.urfin.maxAttack);
 
-    if (attackCount < maxAttackCount) {
+    if (attackCount < userData.urfin.maxAttack) {
         await urfinFight(page, userData);
     }
 }
