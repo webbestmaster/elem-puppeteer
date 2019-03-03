@@ -6,27 +6,38 @@ import type {UserDataType} from '../flow-types/user';
 import {appConst} from '../const';
 
 async function isArenaInBattle(page: Page): Promise<boolean> {
+    console.log('---> function: isArenaInBattle');
+
     let isInBattle: boolean = true;
 
     await page
         .evaluate<string>(
-            'document.querySelector(\'img[src="/img/ico36-reload.png"]]\').getAttribute(\'src\')'
+            'document.querySelector(\'img[src="/img/ico36-reload.png"]\').getAttribute(\'src\')'
         )
-        .catch(
-            (): boolean => {
-                isInBattle = false;
-                return true;
-            }
-        );
+        .catch(() => {
+            isInBattle = false;
+        });
+
+    console.log(isInBattle);
 
     return isInBattle;
 }
 
 async function isArenaBattleEnd(page: Page): Promise<boolean> {
-    return false;
+    try {
+        await page.evaluate<string>(
+            'document.querySelector(\'.inbl.bg_black.plr5\').getAttribute(\'title\')'
+        );
+
+        return true;
+    } catch (error) {
+        return false;
+    }
 }
 
 async function isOnTitleArena(page: Page): Promise<boolean> {
+    console.log('---> function: isOnTitleArena');
+
     try {
         const headerName = await page.evaluate<string>(
             'document.querySelector(\'.bl.fttl.yell.cntr.mt5 .lf .rt\').innerText'
@@ -39,6 +50,8 @@ async function isOnTitleArena(page: Page): Promise<boolean> {
 }
 
 async function joinIntoBattle(page: Page, userData: UserDataType) {
+    console.log('---> action: joinIntoBattle');
+
     try {
         const href = await page.evaluate<string>(
             'document.querySelector(\'a.btn.w120px\').getAttribute(\'href\')'
@@ -52,6 +65,27 @@ async function joinIntoBattle(page: Page, userData: UserDataType) {
     await page.waitFor(1e3);
 }
 
+async function isJoinedInBattle(
+    page: Page,
+    userData: UserDataType
+): Promise<boolean> {
+    try {
+        // check join link
+        await page.evaluate<string>(
+            'document.querySelector(\'a[href^="/survival/join/"]\').getAttribute(\'href\')'
+        );
+
+        // check refresh link
+        await page.evaluate<string>(
+            'document.querySelector(\'a[href="/survival/"]\').getAttribute(\'href\')'
+        );
+
+        return false;
+    } catch (error) {
+        return true;
+    }
+}
+
 export async function arena(page: Page, userData: UserDataType) {
     console.log('---> action: arena');
 
@@ -60,25 +94,32 @@ export async function arena(page: Page, userData: UserDataType) {
     const isOnTitlePage = await isOnTitleArena(page);
 
     if (isOnTitlePage) {
-        await joinIntoBattle(page, userData);
+        if (await isJoinedInBattle(page, userData)) {
+            console.log('i am joined');
+        } else {
+            await joinIntoBattle(page, userData);
+        }
+
+        await page.waitFor(1e3);
         await arena(page, userData);
-        console.log('i am joined');
         return;
     }
+
+    await page.waitFor(1e3);
 
     const isInBattle = await isArenaInBattle(page);
 
     if (isInBattle) {
         console.log('I am in battle');
 
+        await arena(page, userData);
         return;
     }
 
     const isBattleEnd = await isArenaBattleEnd(page);
 
     if (isBattleEnd) {
-        // count battle and decide need more fight or not
-        // if need more fight - run arena(page);
+        await arena(page, userData);
         return;
     }
 }

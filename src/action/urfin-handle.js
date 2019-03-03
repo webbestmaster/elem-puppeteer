@@ -137,7 +137,7 @@ async function isUrfinInBattle(page: Page): Promise<boolean> {
 
     await page
         .evaluate<string>(
-            'document.querySelector(\'img[src="/img/ico36-reload.png"]]\').getAttribute(\'src\')'
+            'document.querySelector(\'img[src="/img/ico36-reload.png"]\').getAttribute(\'src\')'
         )
         .catch(
             (): boolean => {
