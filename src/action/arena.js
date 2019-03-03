@@ -5,6 +5,8 @@ import {Browser, Page} from 'puppeteer';
 import type {UserDataType} from '../flow-types/user';
 import {appConst} from '../const';
 
+const timeout = 100;
+
 async function isArenaInBattle(page: Page): Promise<boolean> {
     console.log('---> function: isArenaInBattle');
 
@@ -86,6 +88,73 @@ async function isJoinedInBattle(
     }
 }
 
+async function arenaFightGetLinkListByIndex(
+    page: Page,
+    index: number
+): Promise<string> {
+    console.log('---> function: arenaFightGetLinkListByIndex');
+
+    return await page
+        .evaluate<string>(
+            `document.querySelector('.fb_path:nth-child(${index +
+                1}) a[class="card"]').getAttribute('href')`
+        )
+        .catch(
+            (error: Error): string => {
+                console.log('can not find card with index:', index);
+                return '';
+            }
+        );
+}
+
+export async function arenaFightGetLinkList(
+    page: Page
+): Promise<Array<string>> {
+    console.log('---> function: arenaFightGetLinkList');
+
+    const linkList = await Promise.all(
+        [0, 1, 2].map(
+            (index: number): Promise<string> =>
+                arenaFightGetLinkListByIndex(page, index)
+        )
+    );
+
+    return linkList.filter(Boolean);
+}
+
+async function fightToDie(page: Page, userData: UserDataType) {
+    console.log('---> action: fightToDie');
+
+    const isBattleEnd = await isArenaBattleEnd(page);
+
+    if (isBattleEnd) {
+        console.log('arena battle is end');
+        return;
+    }
+
+    const linkList = await arenaFightGetLinkList(page);
+
+    console.log(linkList);
+
+    if (linkList.length === 0) {
+        // press refresh button to show more cards
+        await page.goto(userData.siteUrl + appConst.url.arena);
+        await page.waitFor(timeout * 10);
+
+        await fightToDie(page, userData);
+
+        return;
+    }
+
+    console.log('url', userData.siteUrl + linkList[0]);
+
+    await page.goto(userData.siteUrl + linkList[0]);
+    await page.waitFor(timeout * 10);
+
+    await fightToDie(page, userData);
+}
+
+// eslint-disable-next-line max-statements
 export async function arena(page: Page, userData: UserDataType) {
     console.log('---> action: arena');
 
@@ -94,13 +163,17 @@ export async function arena(page: Page, userData: UserDataType) {
     const isOnTitlePage = await isOnTitleArena(page);
 
     if (isOnTitlePage) {
+        console.log('I am in title page');
+
         if (await isJoinedInBattle(page, userData)) {
             console.log('i am joined');
         } else {
             await joinIntoBattle(page, userData);
+            console.log('timeout 15 seconds after join');
+            await page.waitFor(15e3);
         }
 
-        await page.waitFor(1e3);
+        await page.waitFor(3e3);
         await arena(page, userData);
         return;
     }
@@ -111,9 +184,7 @@ export async function arena(page: Page, userData: UserDataType) {
 
     if (isInBattle) {
         console.log('I am in battle');
-
-        await arena(page, userData);
-        return;
+        await fightToDie(page, userData);
     }
 
     const isBattleEnd = await isArenaBattleEnd(page);

@@ -14,7 +14,7 @@ async function watch(page: Page, userData: UserDataType) {
     } catch (error) {
         console.error('---> ERROR: ! urfin !');
         console.error('---> Page URL:', page.url());
-        await page.screenshot({path: './screenshot/urfin-error.png'});
+        await page.screenshot({path: './screenshot/duel-error.png'});
         console.error(error);
     }
 

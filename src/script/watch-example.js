@@ -12,7 +12,7 @@ export async function watch(page: Page, userData: UserDataType) {
         await duel(page, userData);
     } catch (error) {
         console.error('---> ERROR: ! duel ! Page URL:', page.url());
-        await page.screenshot({path: './screenshot/duel-error.png'});
+        await page.screenshot({path: './screenshot/example-duel-error.png'});
         console.error(error);
     }
 
@@ -20,7 +20,9 @@ export async function watch(page: Page, userData: UserDataType) {
         await urfinHandle(page, userData);
     } catch (error) {
         console.error('---> ERROR: ! urfin ! Page URL:', page.url());
-        await page.screenshot({path: './screenshot/urfin-error.png'});
+        await page.screenshot({
+            path: './screenshot/example-urfin-handle-error.png',
+        });
         console.error(error);
     }
 
@@ -28,7 +30,7 @@ export async function watch(page: Page, userData: UserDataType) {
         await arena(page, userData);
     } catch (error) {
         console.error('---> ERROR: ! arena ! Page URL:', page.url());
-        await page.screenshot({path: './screenshot/arena-error.png'});
+        await page.screenshot({path: './screenshot/example-arena-error.png'});
         console.error(error);
     }
 
