@@ -2,35 +2,30 @@
 
 import type {UserDataType} from './flow-types/user';
 
+const originalGameUrl = 'http://elem.mobi';
+const fuckingMailRuGameUrl = 'https://mailru.elem.mobi';
+
 export const userList: Array<UserDataType> = [
     {
         login: 'WebMaster',
         password: '___',
         iFrameUrl: '',
         urfin: {
-            maxAttack: -1,
+            maxHandleAttack: -1,
         },
-        site: {
-            url: 'http://elem.mobi',
-            duel: '/duel',
-            urfin: '/urfin',
-            arena: '/survival',
-        },
+        siteUrl: originalGameUrl,
     },
 
     {
         login: '',
         password: '',
-        iFrameUrl: 'https://mailru.elem.mobi/?foo=bar',
+        iFrameUrl:
+            fuckingMailRuGameUrl +
+            '/?appid___',
         urfin: {
-            maxAttack: 15,
+            maxHandleAttack: 15,
         },
-        site: {
-            url: 'https://mailru.elem.mobi',
-            duel: '/duel',
-            urfin: '/urfin',
-            arena: '/survival',
-        },
+        siteUrl: fuckingMailRuGameUrl,
     },
 
     {
@@ -38,14 +33,9 @@ export const userList: Array<UserDataType> = [
         password: '___',
         iFrameUrl: '',
         urfin: {
-            maxAttack: 15,
+            maxHandleAttack: 15,
         },
-        site: {
-            url: 'http://elem.mobi',
-            duel: '/duel',
-            urfin: '/urfin',
-            arena: '/survival',
-        },
+        siteUrl: originalGameUrl,
     },
 
     {
@@ -53,13 +43,18 @@ export const userList: Array<UserDataType> = [
         password: '___',
         iFrameUrl: '',
         urfin: {
-            maxAttack: 7,
+            maxHandleAttack: 5,
         },
-        site: {
-            url: 'http://elem.mobi',
-            duel: '/duel',
-            urfin: '/urfin',
-            arena: '/survival',
+        siteUrl: originalGameUrl,
+    },
+
+    {
+        login: 'Thunder Bird',
+        password: '___',
+        iFrameUrl: '',
+        urfin: {
+            maxHandleAttack: 2,
         },
+        siteUrl: originalGameUrl,
     },
 ];
