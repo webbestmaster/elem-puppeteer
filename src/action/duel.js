@@ -4,6 +4,7 @@ import type {Browser, Page} from 'puppeteer';
 
 import {getUserFullHp} from '../script/user';
 import type {UserDataType} from '../flow-types/user';
+import {appConst} from '../const';
 
 async function hasAvailableDuel(page: Page): Promise<boolean> {
     console.log('---> function: hasAvailableDuel');
@@ -161,7 +162,7 @@ async function doDuelFight(page: Page, userData: UserDataType) {
             1}) a').getAttribute('href')`
     );
 
-    await page.goto(userData.site.url + newFightUrl);
+    await page.goto(userData.siteUrl + newFightUrl);
 
     await page.waitFor(1e3);
 
@@ -180,7 +181,7 @@ async function doDuelFight(page: Page, userData: UserDataType) {
 export async function duel(page: Page, userData: UserDataType) {
     console.log('---> action: duel');
 
-    await page.goto(userData.site.url + userData.site.duel);
+    await page.goto(userData.siteUrl + appConst.url.duel);
 
     const currentHp = await getUserFullHp(page);
 
@@ -189,7 +190,7 @@ export async function duel(page: Page, userData: UserDataType) {
     if (await isEndOfDuel(page)) {
         console.log('---> action: duel ---> isEndOfDuel');
         await page.waitFor(1e3);
-        await page.goto(userData.site.url + userData.site.duel);
+        await page.goto(userData.siteUrl + appConst.url.duel);
         return;
     }
 
@@ -208,7 +209,7 @@ export async function duel(page: Page, userData: UserDataType) {
 
     console.log('---> action: duel ---> findEnemyForDuel');
 
-    await page.goto(userData.site.url + userData.site.duel + '/tobattle/');
+    await page.goto(userData.siteUrl + appConst.url.duel + '/tobattle/');
 
     await page.waitFor(1e3);
 

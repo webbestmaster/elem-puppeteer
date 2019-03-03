@@ -3,6 +3,7 @@
 import {Browser, Page} from 'puppeteer';
 
 import type {UserDataType} from '../flow-types/user';
+import {appConst} from '../const';
 
 async function isArenaInBattle(page: Page): Promise<boolean> {
     let isInBattle: boolean = true;
@@ -43,7 +44,7 @@ async function joinIntoBattle(page: Page, userData: UserDataType) {
             'document.querySelector(\'a.btn.w120px\').getAttribute(\'href\')'
         );
 
-        page.goto(userData.site.url + href);
+        page.goto(userData.siteUrl + href);
     } catch (error) {
         console.log('you joined into battle');
     }
@@ -54,7 +55,7 @@ async function joinIntoBattle(page: Page, userData: UserDataType) {
 export async function arena(page: Page, userData: UserDataType) {
     console.log('---> action: arena');
 
-    await page.goto(userData.site.url + userData.site.arena);
+    await page.goto(userData.siteUrl + appConst.url.arena);
 
     const isOnTitlePage = await isOnTitleArena(page);
 

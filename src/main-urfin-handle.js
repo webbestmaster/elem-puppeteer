@@ -34,13 +34,13 @@ async function run(userData: UserDataType) {
     if (userData.iFrameUrl) {
         await page.goto(userData.iFrameUrl);
     } else {
-        await page.goto(userData.site.url);
+        await page.goto(userData.siteUrl);
         await login(page, userData);
     }
 
     await watch(page, userData);
 
-    await page.screenshot({path: './screenshot/site.png'});
+    await page.screenshot({path: './screenshot/urfin-handle.png'});
 
     await browser.close();
 }

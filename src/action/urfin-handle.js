@@ -2,7 +2,7 @@
 
 import type {Browser, Page} from 'puppeteer';
 
-// import {appConst} from '../const';
+import {appConst} from '../const';
 import type {UserDataType} from '../flow-types/user';
 
 const timeout = 100;
@@ -10,13 +10,13 @@ const timeout = 100;
 async function urfinStart(page: Page, userData: UserDataType) {
     console.log('---> action: urfinStart');
 
-    await page.goto(userData.site.url + userData.site.urfin + '/');
+    await page.goto(userData.siteUrl + appConst.url.urfin + '/');
     await page.waitFor(timeout);
 
-    await page.goto(userData.site.url + userData.site.urfin + '/next/');
+    await page.goto(userData.siteUrl + appConst.url.urfin + '/next/');
     await page.waitFor(timeout);
 
-    await page.goto(userData.site.url + userData.site.urfin + '/start/');
+    await page.goto(userData.siteUrl + appConst.url.urfin + '/start/');
     await page.waitFor(timeout);
 }
 
@@ -86,14 +86,14 @@ async function urfinFightToDie(page: Page, userData: UserDataType) {
     console.log('---> action: urfinFightToDie');
 
     if (await isBattleEnd(page)) {
-        await page.goto(userData.site.url + userData.site.urfin + '/');
+        await page.goto(userData.siteUrl + appConst.url.urfin + '/');
 
         const attackCount = await getAttackCount(page);
 
         console.log('---> Urfin attack count:', attackCount);
-        console.log('---> Max attack count:', userData.urfin.maxAttack);
+        console.log('---> Max attack count:', userData.urfin.maxHandleAttack);
 
-        if (attackCount < userData.urfin.maxAttack) {
+        if (attackCount < userData.urfin.maxHandleAttack) {
             await urfinFight(page, userData);
         }
         return;
@@ -103,14 +103,14 @@ async function urfinFightToDie(page: Page, userData: UserDataType) {
 
     if (linkList.length === 0) {
         // press refresh button to show more cards
-        await page.goto(userData.site.url + userData.site.urfin + '/battle/');
+        await page.goto(userData.siteUrl + appConst.url.urfin + '/battle/');
         await page.waitFor(timeout * 10);
 
         await urfinFightToDie(page, userData);
         return;
     }
 
-    await page.goto(userData.site.url + linkList[0]);
+    await page.goto(userData.siteUrl + linkList[0]);
     await page.waitFor(timeout);
 
     await urfinFightToDie(page, userData);
@@ -120,7 +120,7 @@ async function urfinFight(page: Page, userData: UserDataType) {
     console.log('---> action: urfinFight');
 
     await page.goto(
-        userData.site.url + userData.site.urfin + '/start/confirmed/'
+        userData.siteUrl + appConst.url.urfin + '/start/confirmed/'
     );
     await page.waitFor(timeout);
 
@@ -158,9 +158,9 @@ export async function urfinHandle(page: Page, userData: UserDataType) {
     const attackCount = await getAttackCount(page);
 
     console.log('---> Urfin attack count:', attackCount);
-    console.log('---> Max attack count:', userData.urfin.maxAttack);
+    console.log('---> Max attack count:', userData.urfin.maxHandleAttack);
 
-    if (attackCount < userData.urfin.maxAttack) {
+    if (attackCount < userData.urfin.maxHandleAttack) {
         await urfinFight(page, userData);
     }
 }

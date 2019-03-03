@@ -7,4 +7,9 @@ export const appConst = {
             height: 620,
         },
     },
+    url: {
+        duel: '/duel',
+        urfin: '/urfin',
+        arena: '/survival',
+    },
 };

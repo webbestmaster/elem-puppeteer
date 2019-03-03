@@ -5,12 +5,13 @@ export type UserDataType = {|
     +password: string,
     +iFrameUrl: string,
     +urfin: {|
-        +maxAttack: number,
+        +maxHandleAttack: number,
     |},
-    +site: {|
-        +url: string,
-        +duel: "/duel",
-        +urfin: "/urfin",
-        +arena: "/survival",
-    |},
+    +siteUrl: string,
+    // +site: {|
+    //     +url: string,
+    // +duel: "/duel",
+    // +urfin: "/urfin",
+    // +arena: "/survival",
+    // |},
 |};
