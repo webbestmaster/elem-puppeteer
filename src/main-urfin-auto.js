@@ -6,15 +6,15 @@ import {login} from './script/login';
 import {runSystem} from './script/run-system';
 import type {UserDataType} from './flow-types/user';
 import {userList} from './user-list.js';
-import {urfinHandle} from './action/urfin-handle';
+import {urfinAuto} from './action/urfin-auto';
 
 async function watch(page: Page, userData: UserDataType) {
     try {
-        await urfinHandle(page, userData);
+        await urfinAuto(page, userData);
     } catch (error) {
-        console.error('---> ERROR: ! urfin - handle !');
+        console.error('---> ERROR: ! urfin - auto !');
         console.error('---> Page URL:', page.url());
-        await page.screenshot({path: './screenshot/urfin-handle-error.png'});
+        await page.screenshot({path: './screenshot/urfin-auto-error.png'});
         console.error(error);
     }
 
@@ -40,7 +40,7 @@ async function run(userData: UserDataType) {
 
     await watch(page, userData);
 
-    await page.screenshot({path: './screenshot/urfin-handle.png'});
+    await page.screenshot({path: './screenshot/urfin-auto.png'});
 
     await browser.close();
 }

@@ -7,19 +7,34 @@ import type {UserDataType} from '../flow-types/user';
 
 const timeout = 100;
 
+async function getAutoLink(page: Page): Promise<string> {
+    try {
+        return await page.evaluate<string>(
+            'document.querySelector(\'a[href^="/urfin/auto/"]\').getAttribute(\'href\')'
+        );
+    } catch (error) {
+        return '';
+    }
+}
+
+async function getAutoLinkConfirmed(page: Page): Promise<string> {
+    try {
+        return await page.evaluate<string>(
+            'document.querySelector(\'a.green[href^="/urfin/auto/"]\').getAttribute(\'href\')'
+        );
+    } catch (error) {
+        return '';
+    }
+}
+
 async function urfinStart(page: Page, userData: UserDataType) {
     console.log('---> action: urfinStart');
 
     await page.goto(userData.siteUrl + appConst.url.urfin + '/');
     await page.waitFor(timeout);
-
-    await page.goto(userData.siteUrl + appConst.url.urfin + '/next/');
-    await page.waitFor(timeout);
-
-    await page.goto(userData.siteUrl + appConst.url.urfin + '/start/');
-    await page.waitFor(timeout);
 }
 
+/*
 async function urfinFightGetLinkListByIndex(
     page: Page,
     index: number
@@ -38,7 +53,9 @@ async function urfinFightGetLinkListByIndex(
             }
         );
 }
+*/
 
+/*
 async function urfinFightGetLinkList(page: Page): Promise<Array<string>> {
     console.log('---> function: urfinFightGetLinkList');
 
@@ -51,7 +68,9 @@ async function urfinFightGetLinkList(page: Page): Promise<Array<string>> {
 
     return linkList.filter(Boolean);
 }
+*/
 
+/*
 async function isBattleEnd(page: Page): Promise<boolean> {
     const linkToNewBattle = await page
         .evaluate<string>(
@@ -61,6 +80,7 @@ async function isBattleEnd(page: Page): Promise<boolean> {
 
     return Boolean(linkToNewBattle);
 }
+*/
 
 async function getAttackCount(page: Page): Promise<number> {
     const errorCount = -1;
@@ -82,6 +102,7 @@ async function getAttackCount(page: Page): Promise<number> {
     }
 }
 
+/*
 async function urfinFightToDie(page: Page, userData: UserDataType) {
     console.log('---> action: urfinFightToDie');
 
@@ -92,12 +113,12 @@ async function urfinFightToDie(page: Page, userData: UserDataType) {
 
         console.log('---> Urfin attack count:', attackCount);
         console.log(
-            '---> Max attack count handle:',
+            '---> Max attack count auto:',
             userData.urfin.maxHandleAttack
         );
 
         if (attackCount < userData.urfin.maxHandleAttack) {
-            await urfinFight(page, userData);
+            await urfinAutoFight(page, userData);
         }
         return;
     }
@@ -118,18 +139,23 @@ async function urfinFightToDie(page: Page, userData: UserDataType) {
 
     await urfinFightToDie(page, userData);
 }
+*/
 
-async function urfinFight(page: Page, userData: UserDataType) {
-    console.log('---> action: urfinFight');
+async function urfinAutoFight(page: Page, userData: UserDataType) {
+    console.log('---> action: urfinAutoFight');
 
-    await page.goto(
-        userData.siteUrl + appConst.url.urfin + '/start/confirmed/'
-    );
+    const autoLink = await getAutoLink(page);
+
+    await page.goto(userData.siteUrl + autoLink);
     await page.waitFor(timeout);
 
-    await urfinFightToDie(page, userData);
+    const autoLinkConfirmed = await getAutoLinkConfirmed(page);
+
+    await page.goto(userData.siteUrl + autoLinkConfirmed);
+    await page.waitFor(timeout);
 }
 
+/*
 async function isUrfinInBattle(page: Page): Promise<boolean> {
     let isInBattle: boolean = true;
 
@@ -146,27 +172,21 @@ async function isUrfinInBattle(page: Page): Promise<boolean> {
 
     return isInBattle;
 }
+*/
 
-export async function urfinHandle(page: Page, userData: UserDataType) {
+export async function urfinAuto(page: Page, userData: UserDataType) {
     console.log('---> action: urfin');
 
     await urfinStart(page, userData);
     await page.waitFor(timeout);
 
-    if (await isUrfinInBattle(page)) {
-        await urfinFightToDie(page, userData);
-        return;
-    }
-
     const attackCount = await getAttackCount(page);
 
     console.log('---> Urfin attack count:', attackCount);
-    console.log(
-        '---> Max attack count handle:',
-        userData.urfin.maxHandleAttack
-    );
+    console.log('---> Max attack count auto:', userData.urfin.maxAutoAttack);
 
-    if (attackCount < userData.urfin.maxHandleAttack) {
-        await urfinFight(page, userData);
+    if (attackCount < userData.urfin.maxAutoAttack) {
+        await urfinAutoFight(page, userData);
+        await urfinAuto(page, userData);
     }
 }

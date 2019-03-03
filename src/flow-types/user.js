@@ -6,6 +6,7 @@ export type UserDataType = {|
     +iFrameUrl: string,
     +urfin: {|
         +maxHandleAttack: number,
+        +maxAutoAttack: number,
     |},
     +siteUrl: string,
     // +site: {|
