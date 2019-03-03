@@ -5,6 +5,8 @@ import type {Browser, Page} from 'puppeteer';
 import {appConst} from '../const';
 import type {UserDataType} from '../flow-types/user';
 
+import {urfinFightGetLinkList} from './urfin-handle';
+
 const timeout = 100;
 
 async function getAutoLink(page: Page): Promise<string> {
@@ -174,11 +176,81 @@ async function isUrfinInBattle(page: Page): Promise<boolean> {
 }
 */
 
+async function isHandOnlyWay(page: Page): Promise<boolean> {
+    try {
+        // check auto link
+        await page.evaluate<string>(
+            'document.querySelector(\'a[href^="/urfin/auto/"]\').getAttribute(\'href\')'
+        );
+
+        // check handle link
+        await page.evaluate<string>(
+            'document.querySelector(\'a[href="/urfin/start/"]\').getAttribute(\'href\')'
+        );
+
+        return false;
+    } catch (error) {
+        return true;
+    }
+}
+
+async function isBattleEnd(page: Page): Promise<boolean> {
+    const linkToNewBattle = await page
+        .evaluate<string>(
+            'document.querySelector(\'.btn.bli.mlra.w140px.sll\').getAttribute(\'href\')'
+        )
+        .catch((): string => '');
+
+    return Boolean(linkToNewBattle);
+}
+
+async function urfinFightToDie(page: Page, userData: UserDataType) {
+    console.log('---> action: urfinFightToDie');
+
+    if (await isBattleEnd(page)) {
+        await urfinStart(page, userData);
+        return;
+    }
+
+    const linkList = await urfinFightGetLinkList(page);
+
+    if (linkList.length === 0) {
+        // press refresh button to show more cards
+        await page.goto(userData.siteUrl + appConst.url.urfin + '/battle/');
+        await page.waitFor(timeout * 10);
+
+        await urfinFightToDie(page, userData);
+        return;
+    }
+
+    await page.goto(userData.siteUrl + linkList[0]);
+    await page.waitFor(timeout);
+
+    await urfinFightToDie(page, userData);
+}
+
+async function handleFight(page: Page, userData: UserDataType) {
+    try {
+        await page.goto(userData.siteUrl + appConst.url.urfin + '/start/');
+        await page.waitFor(timeout);
+
+        await urfinFightToDie(page, userData);
+    } catch (error) {
+        console.log(error);
+    }
+}
+
 export async function urfinAuto(page: Page, userData: UserDataType) {
     console.log('---> action: urfin');
 
     await urfinStart(page, userData);
     await page.waitFor(timeout);
+
+    if (await isHandOnlyWay(page)) {
+        await handleFight(page, userData);
+        await urfinAuto(page, userData);
+        return;
+    }
 
     const attackCount = await getAttackCount(page);
 

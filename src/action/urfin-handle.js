@@ -39,7 +39,9 @@ async function urfinFightGetLinkListByIndex(
         );
 }
 
-async function urfinFightGetLinkList(page: Page): Promise<Array<string>> {
+export async function urfinFightGetLinkList(
+    page: Page
+): Promise<Array<string>> {
     console.log('---> function: urfinFightGetLinkList');
 
     const linkList = await Promise.all(
