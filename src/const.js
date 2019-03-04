@@ -21,7 +21,7 @@ export const appConst = {
 export async function refreshIFrameUrl(page: Page, userData: UserDataType) {
     console.log('---> refreshIFrameUrl');
 
-    if (userData.iFrameUrl !== '') {
+    if (userData.iFrameUrl === '') {
         return;
     }
 
