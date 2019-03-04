@@ -18,6 +18,11 @@ async function watch(page: Page, userData: UserDataType) {
         console.error(error);
     }
 
+    if (userData.iFrameUrl !== '') {
+        // refresh mailSru's session
+        await page.goto(userData.iFrameUrl);
+    }
+
     await page.waitFor(10e3);
 
     console.log('---> End of loop');

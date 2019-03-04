@@ -169,8 +169,8 @@ export async function arena(page: Page, userData: UserDataType) {
             console.log('i am joined');
         } else {
             await joinIntoBattle(page, userData);
-            console.log('timeout 15 seconds after join');
-            await page.waitFor(15e3);
+            console.log('timeout 10 seconds after join');
+            await page.waitFor(10e3);
         }
 
         await page.waitFor(3e3);
