@@ -7,6 +7,7 @@ import {runSystem} from './script/run-system';
 import type {UserDataType} from './flow-types/user';
 import {userList} from './user-list.js';
 import {arena} from './action/arena';
+import {refreshIFrameUrl} from './const';
 
 async function watch(page: Page, userData: UserDataType) {
     try {
@@ -18,10 +19,7 @@ async function watch(page: Page, userData: UserDataType) {
         console.error(error);
     }
 
-    if (userData.iFrameUrl !== '') {
-        // refresh mailSru's session
-        await page.goto(userData.iFrameUrl);
-    }
+    await refreshIFrameUrl(page, userData);
 
     await page.waitFor(10e3);
 
