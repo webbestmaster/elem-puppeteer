@@ -2,7 +2,7 @@
 
 import type {Browser, Page} from 'puppeteer';
 
-import {appConst} from '../const';
+import {appConst, refreshIFrameUrl} from '../const';
 import type {UserDataType} from '../flow-types/user';
 
 import {urfinFightGetLinkList} from './urfin-handle';
@@ -256,6 +256,8 @@ export async function urfinAuto(page: Page, userData: UserDataType) {
 
     console.log('---> Urfin attack count:', attackCount);
     console.log('---> Max attack count auto:', userData.urfin.maxAutoAttack);
+
+    await refreshIFrameUrl(page, userData);
 
     if (attackCount < userData.urfin.maxAutoAttack) {
         await urfinAutoFight(page, userData);

@@ -2,7 +2,7 @@
 
 import type {Browser, Page} from 'puppeteer';
 
-import {appConst} from '../const';
+import {appConst, refreshIFrameUrl} from '../const';
 import type {UserDataType} from '../flow-types/user';
 
 const timeout = 100;
@@ -167,6 +167,8 @@ export async function urfinHandle(page: Page, userData: UserDataType) {
         '---> Max attack count handle:',
         userData.urfin.maxHandleAttack
     );
+
+    await refreshIFrameUrl(page, userData);
 
     if (attackCount < userData.urfin.maxHandleAttack) {
         await urfinFight(page, userData);
