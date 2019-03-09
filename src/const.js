@@ -21,6 +21,7 @@ export const appConst = {
 export async function refreshIFrameUrl(page: Page, userData: UserDataType) {
     console.log('---> refreshIFrameUrl');
 
+/*
     if (userData.iFrameUrl === '') {
         return;
     }
@@ -31,4 +32,5 @@ export async function refreshIFrameUrl(page: Page, userData: UserDataType) {
     await page.waitFor(100);
     await page.goto(url);
     await page.waitFor(100);
+*/
 }
