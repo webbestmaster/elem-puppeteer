@@ -7,6 +7,12 @@ declare module 'puppeteer' {
         path: string,
     };
 
+    declare class InterceptedRequest {
+        resourceType(): string,
+        abort(): mixed,
+        continue(): mixed,
+    }
+
     declare class Page {
         goto(url: string): Promise<mixed>,
         screenshot(options: PageScreenshotOptionsType): Promise<mixed>,
@@ -17,6 +23,8 @@ declare module 'puppeteer' {
         url(): string,
         waitFor(timeoutInMs: number): Promise<mixed>,
         setViewport(size: {width: number, height: number}): Promise<mixed>,
+        setRequestInterception(isEnable: boolean): Promise<mixed>,
+        on<T>(eventName: string, callback: (context: T)=> mixed): mixed,
     }
 
     declare class Browser {

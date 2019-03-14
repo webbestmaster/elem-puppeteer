@@ -1,11 +1,19 @@
 // @flow
 
-import type {Browser, Page} from 'puppeteer';
+import type {Browser, Page, InterceptedRequest} from 'puppeteer';
 import puppeteer from 'puppeteer';
 
 import type {UserDataType} from '../flow-types/user';
 import {appConst} from '../const';
 import {userList} from '../user-list';
+
+function blockImageRequest(interceptedRequest: InterceptedRequest) {
+    if (interceptedRequest.resourceType() === 'image') {
+        interceptedRequest.abort();
+        return;
+    }
+    interceptedRequest.continue();
+}
 
 export async function runSystem(
     userData: UserDataType
@@ -29,6 +37,10 @@ export async function runSystem(
     });
 
     const page = await browser.newPage();
+
+    await page.setRequestInterception(true);
+
+    page.on<InterceptedRequest>('request', blockImageRequest);
 
     await page.setViewport({width, height});
 

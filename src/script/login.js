@@ -17,7 +17,9 @@ export async function login(page: Page, userData: UserDataType) {
     if (userLogin && password) {
         console.log('login with login/password');
 
-        await page.click(loginSelector.loginLink);
+        // await page.click(loginSelector.loginLink);
+
+        await page.goto(userData.siteUrl + '/login');
 
         await page.type(loginSelector.loginNameInput, userLogin);
 
