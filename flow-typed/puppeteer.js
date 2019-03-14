@@ -27,7 +27,14 @@ declare module 'puppeteer' {
     declare type LaunchOptionsType = {
         headless?: boolean,
         slowMo?: number,
-        args?: Array<string>, // example '--window-size=384,480'
+
+        /*
+        * `--window-size=${width},${height}`,
+        * `--window-position=${leftPosition},${topPosition}`,
+        * '--disable-infobars',
+        * '--allow-insecure-localhost',
+        * */
+        args?: Array<string>, // example ['--window-size=384,480', '--disable-infobars']
     }
 
     declare function launch(launchOptions: LaunchOptionsType): Browser;
