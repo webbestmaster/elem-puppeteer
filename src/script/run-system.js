@@ -22,7 +22,7 @@ export async function runSystem(
 
     const userIndex = userList.indexOf(userData);
 
-    const leftPosition = userIndex * width * 0.8;
+    const leftPosition = userIndex * width * 0.6;
 
     const browser = await puppeteer.launch({
         headless: false,
