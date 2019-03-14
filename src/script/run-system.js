@@ -24,6 +24,7 @@ export async function runSystem(
             `--window-position=${leftPosition},0`,
             '--disable-infobars',
             '--allow-insecure-localhost',
+            '--disable-gpu',
         ],
     });
 

@@ -33,6 +33,7 @@ declare module 'puppeteer' {
         * `--window-position=${leftPosition},${topPosition}`,
         * '--disable-infobars',
         * '--allow-insecure-localhost',
+        * '--disable-gpu',
         * */
         args?: Array<string>, // example ['--window-size=384,480', '--disable-infobars']
     }
