@@ -1,11 +1,15 @@
 // @flow
 
+/* global setTimeout */
+
 import type {Browser, Page, InterceptedRequest} from 'puppeteer';
 import puppeteer from 'puppeteer';
 
 import type {UserDataType} from '../flow-types/user';
 import {appConst} from '../const';
 import {userList} from '../user-list';
+
+const shellIntervalTimeout = 30 * 60 * 1000;
 
 function blockImageRequest(interceptedRequest: InterceptedRequest) {
     if (interceptedRequest.resourceType() === 'image') {
@@ -43,6 +47,12 @@ export async function runSystem(
     page.on<InterceptedRequest>('request', blockImageRequest);
 
     await page.setViewport({width, height});
+
+    // WARNING!!! see timeout in package.json/scrips/duel-int
+    setTimeout(() => {
+        browser.close();
+        // do not use timeout in package.json/scrips/duel-int, let browser close
+    }, shellIntervalTimeout - 5e3);
 
     return {page, browser};
 }
