@@ -40,7 +40,9 @@ export async function runSystem(
         ],
     });
 
-    const page = await browser.newPage();
+    const pages = await browser.pages();
+
+    const page = pages[0];
 
     await page.setRequestInterception(true);
 
@@ -49,10 +51,10 @@ export async function runSystem(
     await page.setViewport({width, height});
 
     // WARNING!!! see timeout in package.json/scrips/duel-int
-    setTimeout(() => {
-        browser.close();
-        // do not use timeout in package.json/scrips/duel-int, let browser close
-    }, shellIntervalTimeout - 5e3);
+    // setTimeout(() => {
+    // browser.close();
+    // do not use timeout in package.json/scrips/duel-int, let browser close
+    // }, shellIntervalTimeout - 5e3);
 
     return {page, browser};
 }
