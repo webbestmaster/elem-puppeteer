@@ -40,9 +40,7 @@ export async function runSystem(
         ],
     });
 
-    const pages = await browser.pages();
-
-    const page = pages[0];
+    const [page] = await browser.pages();
 
     await page.setRequestInterception(true);
 
