@@ -11,7 +11,7 @@ export function getTimeout(): number | null {
     const env: mixed = getEnv();
     const timeout: mixed = env && typeof env === 'object' ? env.TIMEOUT : null;
 
-    if (timeout === null) {
+    if (typeof timeout !== 'string' || !/^\d+$/.test(timeout)) {
         return null;
     }
 
