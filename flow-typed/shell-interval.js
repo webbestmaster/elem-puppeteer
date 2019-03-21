@@ -9,7 +9,7 @@ declare module 'shell-interval' {
             eager?: boolean,
             quiet?: boolean,
         },
-        onExec: (error?: Error, stdout: string, stderr: string) => mixed,
+        onExec: (error: Error | null, stdout: string, stderr: string) => mixed,
         onFinish: () => mixed,
     }
 

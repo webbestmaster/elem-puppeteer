@@ -22,7 +22,6 @@
     "duel-int": "babel-node ./src/main-duel-int.js",
     "arena": "babel-node ./src/main-arena.js",
     "arena-int": "babel-node ./src/main-arena-int.js",
-
     "check": "npm run eslint; npm run flow;",
     "check:fix": "npm run prettier; npm run eslint:fix; npm run flow;",
     "eslint": "eslint .",

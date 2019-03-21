@@ -4,17 +4,17 @@ import shellInterval from 'shell-interval';
 
 shellInterval({
     options: {
-        command: 'babel-node ./src/main-duel.js',
-        time: 30,
+        command: 'cross-env TIMEOUT=30 babel-node ./src/main-duel.js',
+        time: 30 * 60, // 30 minutes
         reps: 5,
         eager: true,
     },
-    onExec(error?: Error, stdout: string, stderr: string) {
+    onExec(error: Error | null, stdout: string, stderr: string) {
         if (error) {
             throw error;
         }
 
-        console.log(stdout);
+        console.log('shellInterval - onExec:', stdout);
     },
     onFinish() {
         console.log('The shell command was called several times. Exiting...');
