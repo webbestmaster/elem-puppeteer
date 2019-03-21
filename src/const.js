@@ -16,6 +16,9 @@ export const appConst = {
         urfin: '/urfin',
         arena: '/survival',
     },
+    interval: {
+        main: 1e6,
+    },
 };
 
 export async function refreshIFrameUrl(page: Page, userData: UserDataType) {

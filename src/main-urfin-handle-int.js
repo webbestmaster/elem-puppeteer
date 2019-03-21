@@ -8,7 +8,7 @@ const timeout = 25 * 60; // in seconds, here is 25 minutes;
 
 shellInterval({
     options: {
-        command: `cross-env TIMEOUT=${timeout} babel-node ./src/main-duel.js`,
+        command: `cross-env TIMEOUT=${timeout} babel-node ./src/main-urfin-handle.js`,
         time: timeout,
         reps: appConst.interval.main,
         eager: true,
