@@ -2,10 +2,12 @@
 
 import shellInterval from 'shell-interval';
 
+const timeout = 25 * 60; // in seconds, here is 25 minutes;
+
 shellInterval({
     options: {
-        command: 'cross-env TIMEOUT=30 babel-node ./src/main-duel.js',
-        time: 30 * 60, // 30 minutes
+        command: `cross-env TIMEOUT=${timeout} babel-node ./src/main-duel.js`,
+        time: timeout,
         reps: 5,
         eager: true,
     },
