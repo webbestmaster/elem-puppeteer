@@ -15,7 +15,7 @@ shellInterval({
     },
     onExec(error: Error | null, stdout: string, stderr: string) {
         if (error) {
-            throw error;
+            console.log(error.message);
         }
 
         console.log('shellInterval - onExec:', stdout);
