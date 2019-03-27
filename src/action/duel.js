@@ -43,7 +43,7 @@ async function isEndOfDuel(page: Page): Promise<boolean> {
 export async function findEnemyForDuel(page: Page) {
     console.log('---> action: findEnemyForDuel');
 
-    const duelMaxHpQ = 1.1;
+    const duelMaxHpQ = 1.075;
     const duelMinHpQ = 0.9;
 
     const currentHp = await getUserFullHp(page);
