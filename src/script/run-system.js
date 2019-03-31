@@ -9,6 +9,7 @@ import type {UserDataType} from '../flow-types/user';
 import {appConst} from '../const';
 import {userList} from '../user-list';
 import {getTimeout} from '../util/env';
+import {delay} from '../util/delay';
 
 function blockImageRequest(interceptedRequest: InterceptedRequest) {
     if (interceptedRequest.resourceType() === 'image') {
@@ -26,6 +27,8 @@ export async function runSystem(
     const userIndex = userList.indexOf(userData);
 
     const leftPosition = userIndex * width * 0.6;
+
+    await delay(userIndex * 4e3);
 
     const browser = await puppeteer.launch({
         headless: false,
