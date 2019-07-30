@@ -24,9 +24,9 @@ async function watch(page: Page, userData: UserDataType) {
     await page.waitFor(10e3);
 
     console.log('---> End of loop');
-    console.log('---> Timeout 1 minutes');
+    console.log('---> Timeout 5 seconds');
 
-    await page.waitFor(60e3); // 1 minute
+    await page.waitFor(5e3); // 5 seconds
 
     await watch(page, userData);
 }
