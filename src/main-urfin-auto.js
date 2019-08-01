@@ -18,12 +18,12 @@ async function watch(page: Page, userData: UserDataType) {
         console.error(error);
     }
 
-    await page.waitFor(10e3);
+    await page.waitFor(1e3);
 
     console.log('---> End of loop');
-    console.log('---> Timeout 5 seconds');
+    console.log('---> Timeout 1 second');
 
-    await page.waitFor(5e3); // 5 seconds
+    await page.waitFor(1e3); // 1 seconds
 
     await watch(page, userData);
 }
