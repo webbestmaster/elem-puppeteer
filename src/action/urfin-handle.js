@@ -11,13 +11,13 @@ async function urfinStart(page: Page, userData: UserDataType) {
     console.log('---> action: urfinStart');
 
     await page.goto(userData.siteUrl + appConst.url.urfin + '/');
-    await page.waitFor(timeout);
+    await page.waitFor(timeout * 10);
 
     await page.goto(userData.siteUrl + appConst.url.urfin + '/next/');
-    await page.waitFor(timeout);
+    await page.waitFor(timeout * 10);
 
     await page.goto(userData.siteUrl + appConst.url.urfin + '/start/');
-    await page.waitFor(timeout);
+    await page.waitFor(timeout * 10);
 }
 
 async function urfinFightGetLinkListByIndex(
